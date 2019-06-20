@@ -22,7 +22,11 @@ Import-module -name PowerSpace
 ```
 Set-ExecutionPolicy RemoteSigned
 ```
+4. Start the script with:
+```
+Start-PowerSpace
+```
 
 <p>
-<img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="800" "v0.6.0"/>
+<img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="1000" "v0.6.0"/>
 </p>
