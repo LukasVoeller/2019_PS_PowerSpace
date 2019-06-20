@@ -6,23 +6,23 @@ The script can be tested as described next.
 
 ## Installation
 
-Copy the files in the following dircetory:
+1. Copy the files in the following dircetory:
 ```
 C:\Users\____\Documents\WindowsPowerShell\Modules\PowerSpace
 ```
-Check if the path is registred Eviroment path by using:
+2. Check if the path is registred Eviroment path by using:
 ```
 $Env:PSModulePath
 ```
-Import the module by using:
+3. Import the module by using:
 ```
 Import-module -name PowerSpace
 ```
-Finally set the Execution policy scope to your local machine:
+4. Finally set the Execution policy scope to your local machine:
 ```
 Set-ExecutionPolicy RemoteSigned
 ```
 
 <p>
-<img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="150" "v0.6.0"/>
+<img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="600" "v0.6.0"/>
 </p>
