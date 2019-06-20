@@ -24,5 +24,5 @@ Set-ExecutionPolicy RemoteSigned
 ```
 
 <p>
-<img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="600" "v0.6.0"/>
+<img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="800" "v0.6.0"/>
 </p>
