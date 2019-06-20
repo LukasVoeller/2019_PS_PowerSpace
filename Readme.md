@@ -23,4 +23,6 @@ Finally set the Execution policy scope to your local machine:
 Set-ExecutionPolicy RemoteSigned
 ```
 
+<p>
 <img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/Console.PNG" width="150" "v0.6.0"/>
+</p>
