@@ -7,6 +7,20 @@ class Star {
     }
 }
 
+class Spaceship {
+    [string]$name = "Spaceshell"
+
+    [string]$appearance1 = "*"
+    [string]$appearance2 = "*"
+    [string]$appearance3 = "*"
+    [string]$appearance4 = "*"
+    [string]$appearance5 = "*"
+    [string]$appearance6 = "*"
+    [string]$appearance7 = "*"
+    [string]$appearance8 = "*"
+    [string]$appearance9 = "*"
+}
+
 function Start-PowerSpace {
     function makeStars {
         [Star[]] $stars
@@ -73,8 +87,10 @@ function Start-PowerSpace {
 
     function moveStarfield ([Star[]]$stars) {
         for ($i = 1; $i -le $windowHeight; $i++) {
-            $stars[$i].pos = $stars[$i].pos - 1
-
+            if ($stars[$i].pos -ne $null) {
+                $stars[$i].pos = $stars[$i].pos - 1
+            }
+            
             #Write-Host "-> Control Moved Star:$i" "With:"$stars[$i].pos $stars[$i].appearance "LArray:"$stars.Length
         }
     }
@@ -96,12 +112,16 @@ function Start-PowerSpace {
         $pswindow.windowsize = $newsize
     }
 
-    function gameLoop ([Star[]]$stars) {
+    function gameLoop () {
+        [Star[]] $stars = makeStars
+
         while ($true) {
-            $starfield = makeStarfield($stars)
-            Write-Host $starfield
-        
-            moveStarfield($stars)
+            $windowWidth = $Host.UI.RawUI.WindowSize.Width
+            $windowHeight = $Host.UI.RawUI.WindowSize.Height
+
+            $starfield = makeStarfield($stars)                          # Update
+            Write-Host $starfield                                       # Draw
+            moveStarfield($stars)                                       # Move
 
             for ($i = 1; $i -le $stars.Length-1; $i++) {
                 if ($stars[$i].pos -lt 1) {
@@ -113,22 +133,33 @@ function Start-PowerSpace {
                 }
             }
 
+            if ($windowHeight -gt 40) {
+                if ($windowHeight -gt $stars.Length) {
+                    $pos = Get-Random -Minimum 0 -Maximum $windowWidth
+                    $star = New-Object Star($pos)
+                    $stars += @($star)
+                }
+            }
+
             Start-Sleep -Milliseconds (1000 / $fps)
             Clear-Host
+
+            Write-Host "X:"$windowWidth "Y:"$windowHeight "Stars:"$stars.Length
         }
     }
 
     # -------------------------------- MAIN --------------------------------
-    setWindowSize
+    $debug = $false
     $fps = 50
+
+    setWindowSize
     
     $windowWidth = $Host.UI.RawUI.WindowSize.Width
     $windowHeight = $Host.UI.RawUI.WindowSize.Height
-    $debug = $false
 
-    [Star[]] $stars = makeStars
-    gameLoop($stars)
+    gameLoop
 
+    # -------------------------------- DEBUG -------------------------------
     #$starfield = makeStarfield($stars)
     #Write-Host $starfield
     #moveStarfield($stars)
