@@ -79,6 +79,23 @@ function Start-PowerSpace {
         }
     }
 
+    function setWindowSize {
+        $pshost = get-host
+        $pswindow = $pshost.ui.rawui
+
+        if ($pswindow.windowsize.Width -lt 120) {
+            $newsize = $pswindow.buffersize
+            $newsize.height = 3000
+            $newsize.width = 120
+            $pswindow.buffersize = $newsize
+        }
+        
+        $newsize = $pswindow.windowsize
+        $newsize.height = 40
+        $newsize.width = 120
+        $pswindow.windowsize = $newsize
+    }
+
     function gameLoop ([Star[]]$stars) {
         while ($true) {
             $starfield = makeStarfield($stars)
@@ -96,12 +113,15 @@ function Start-PowerSpace {
                 }
             }
 
-            Start-Sleep -Milliseconds 15
+            Start-Sleep -Milliseconds (1000 / $fps)
             Clear-Host
         }
     }
 
     # -------------------------------- MAIN --------------------------------
+    setWindowSize
+    $fps = 50
+    
     $windowWidth = $Host.UI.RawUI.WindowSize.Width
     $windowHeight = $Host.UI.RawUI.WindowSize.Height
     $debug = $false
