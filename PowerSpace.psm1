@@ -23,10 +23,12 @@ class Spaceship {
 
 function Start-PowerSpace {
     function makeStars {
+        $windowWidth = $Host.UI.RawUI.WindowSize.Width
+        $windowHeight = $Host.UI.RawUI.WindowSize.Height
         [Star[]] $stars
-    
+
         for ($i = 0; $i -lt $windowHeight; $i++) {
-            $pos = Get-Random -Minimum 0 -Maximum $windowWidth
+            $pos = Get-Random -Minimum 1 -Maximum ($windowWidth+1)          # Random number from 1-120
             $star = New-Object Star($pos)
             $stars += @($star)
 
@@ -38,6 +40,8 @@ function Start-PowerSpace {
     }
     
     function makeStarline ([Star]$star) {
+        $windowWidth = $Host.UI.RawUI.WindowSize.Width
+        $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starline = ""
     
         if ($star.pos -lt 1) {
@@ -73,6 +77,8 @@ function Start-PowerSpace {
     }
 
     function makeStarfield ([Star[]]$stars) {
+        $windowWidth = $Host.UI.RawUI.WindowSize.Width
+        $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starfield = ""
     
         for ($i = 1; $i -le $windowHeight-1; $i++) {
@@ -86,6 +92,9 @@ function Start-PowerSpace {
     }
 
     function moveStarfield ([Star[]]$stars) {
+        $windowWidth = $Host.UI.RawUI.WindowSize.Width
+        $windowHeight = $Host.UI.RawUI.WindowSize.Height
+
         for ($i = 1; $i -le $windowHeight; $i++) {
             if ($stars[$i].pos -ne $null) {
                 $stars[$i].pos = $stars[$i].pos - 1
@@ -123,7 +132,9 @@ function Start-PowerSpace {
             Write-Host $starfield                                       # Draw
             moveStarfield($stars)                                       # Move
 
-            for ($i = 1; $i -le $stars.Length-1; $i++) {
+            #Write-Host "X:"$windowWidth "Y:"$windowHeight "Stars:"$stars.Length -NoNewline
+
+            for ($i = 0; $i -lt $stars.Length-1; $i++) {                # Spawn new stars
                 if ($stars[$i].pos -lt 1) {
                     $spawnStar = Get-Random -Minimum 1 -Maximum 50
         
@@ -133,7 +144,7 @@ function Start-PowerSpace {
                 }
             }
 
-            if ($windowHeight -gt 40) {
+            if ($windowHeight -gt 40) {                                 # Add stars if height increases
                 if ($windowHeight -gt $stars.Length) {
                     $pos = Get-Random -Minimum 0 -Maximum $windowWidth
                     $star = New-Object Star($pos)
@@ -143,20 +154,14 @@ function Start-PowerSpace {
 
             Start-Sleep -Milliseconds (1000 / $fps)
             Clear-Host
-
-            Write-Host "X:"$windowWidth "Y:"$windowHeight "Stars:"$stars.Length
         }
     }
 
     # -------------------------------- MAIN --------------------------------
-    $debug = $false
+    $debug = $true
     $fps = 50
 
     setWindowSize
-    
-    $windowWidth = $Host.UI.RawUI.WindowSize.Width
-    $windowHeight = $Host.UI.RawUI.WindowSize.Height
-
     gameLoop
 
     # -------------------------------- DEBUG -------------------------------
