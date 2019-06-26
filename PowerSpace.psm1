@@ -32,6 +32,7 @@ function Start-PowerSpace {
             $star = New-Object Star($pos)
             $stars += @($star)
 
+            #Write-Host "Made:" $i "Stars"
             #Write-Host "Made Star:$i" "With:"$star.pos $star.appearance "LArray:"$stars.Length -NoNewline
             #Write-Host "-> Control Made Star:$i" "With:"$stars[$i].pos $stars[$i].appearance "LArray:"$stars.Length
         }
@@ -39,7 +40,7 @@ function Start-PowerSpace {
         return $stars
     }
     
-    function makeStarline ([Star]$star) {
+    function makeStarline ([Star] $star) {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starline = ""
@@ -51,7 +52,6 @@ function Start-PowerSpace {
                 }else {
                     $starline = $starline + " "
                 }
-                
             }
         }else {
             for ($i = 1; $i -lt $star.pos; $i++) {
@@ -76,22 +76,23 @@ function Start-PowerSpace {
         return $starline
     }
 
-    function makeStarfield ([Star[]]$stars) {
+    function makeStarfield ([Star[]] $stars) {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starfield = ""
     
-        for ($i = 1; $i -le $windowHeight-1; $i++) {
+        for ($i = 1; $i -le $windowHeight-1; $i++) {                # -1 so the last line ist the command indicator "_"
             $starline = makeStarline($stars[$i])
             $starfield = $starfield + $starline
 
+            #Write-Host "Made:" $i "Starlines"
             #Write-Host "Using Star:$i" "With:"$stars[$i].pos $stars[$i].appearance "LArray:"$stars.Length
         }
     
         return $starfield
     }
 
-    function moveStarfield ([Star[]]$stars) {
+    function moveStarfield ([Star[]] $stars) {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
 
@@ -158,10 +159,9 @@ function Start-PowerSpace {
     }
 
     # -------------------------------- MAIN --------------------------------
-    $debug = $true
+    $debug = $false
     $fps = 50
 
-    setWindowSize
     gameLoop
 
     # -------------------------------- DEBUG -------------------------------
