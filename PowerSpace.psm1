@@ -9,19 +9,18 @@ class Star {
 
 class Spaceship {
     [string]$name = "Spaceshell"
+    [int]$x = 0
+    [int]$y = 0
 
-    [string]$appearance1 = "*"
-    [string]$appearance2 = "*"
-    [string]$appearance3 = "*"
-    [string]$appearance4 = "*"
-    [string]$appearance5 = "*"
-    [string]$appearance6 = "*"
-    [string]$appearance7 = "*"
-    [string]$appearance8 = "*"
-    [string]$appearance9 = "*"
+    [string]$appearance1 = " ____"
+    [string]$appearance2 = "O    |="
+    [string]$appearance3 = "/\-- \__\"
+    [string]$appearance4 = "\/-- /__/"
+    [string]$appearance5 = "O____|="
 }
 
 function Start-PowerSpace {
+
     function makeStars {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
@@ -40,12 +39,26 @@ function Start-PowerSpace {
         return $stars
     }
     
-    function makeStarline ([Star] $star) {
+    function makeStarline ([Star] $star, [Spaceship] $spaceship, $row) {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starline = ""
     
-        if ($star.pos -lt 1) {
+        # Handeling the lines without a star
+        if ($row -eq 5 -and $star.pos -le $spaceship.appearance1.Length) {
+            $starline = $starline + $spaceship.appearance1
+
+            for ($i = 0; $i -lt ($windowWidth - $spaceship.appearance1.Length); $i++) {
+                if ($debug) {
+                    $starline = $starline + "-"
+                }else {
+                    $starline = $starline + " "
+                }
+            }
+
+            return $starline
+
+        } elseif ($star.pos -lt 1) {
             for ($i = 0; $i -lt $windowWidth; $i++) {
                 if ($debug) {
                     $starline = $starline + "-"
@@ -53,7 +66,25 @@ function Start-PowerSpace {
                     $starline = $starline + " "
                 }
             }
-        }else {
+
+            return $starline
+        }
+        
+        # Handeling the space before a star and adding the star
+        if ($row -eq 5 -and $star.pos -gt $spaceship.appearance1.Length) {
+            $starline = $starline + $spaceship.appearance1
+
+            for ($i = 1; $i -lt ($star.pos - $spaceship.appearance1.Length); $i++) {
+                if ($debug) {
+                    $starline = $starline + "+"
+                } else {
+                    $starline = $starline + " "
+                }
+            }
+
+            $starline = $starline + $star.appearance
+
+        } else {
             for ($i = 1; $i -lt $star.pos; $i++) {
                 if ($debug) {
                     $starline = $starline + "+"
@@ -61,28 +92,29 @@ function Start-PowerSpace {
                     $starline = $starline + " "
                 }
             }
-        
+
             $starline = $starline + $star.appearance
+        }
         
-            for ($i = $star.pos; $i -lt $windowWidth; $i++) {
-                if ($debug) {
-                    $starline = $starline + "-"
-                }else {
-                    $starline = $starline + " "
-                }
+        # Handling the space after thr star
+        for ($i = $star.pos; $i -lt $windowWidth; $i++) {
+            if ($debug) {
+                $starline = $starline + "-"
+            } else {
+                $starline = $starline + " "
             }
         }
     
         return $starline
     }
 
-    function makeStarfield ([Star[]] $stars) {
+    function makeStarfield ([Star[]] $stars, [Spaceship] $spaceship) {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starfield = ""
     
         for ($i = 1; $i -le $windowHeight-1; $i++) {                # -1 so the last line ist the command indicator "_"
-            $starline = makeStarline($stars[$i])
+            $starline = makeStarline $stars[$i] $spaceship $i
             $starfield = $starfield + $starline
 
             #Write-Host "Made:" $i "Starlines"
@@ -124,12 +156,13 @@ function Start-PowerSpace {
 
     function gameLoop () {
         [Star[]] $stars = makeStars
+        [Spaceship] $spaceship = New-Object Spaceship
 
         while ($true) {
             $windowWidth = $Host.UI.RawUI.WindowSize.Width
             $windowHeight = $Host.UI.RawUI.WindowSize.Height
 
-            $starfield = makeStarfield($stars)                          # Update
+            $starfield = makeStarfield $stars $spaceship                # Update
             Write-Host $starfield                                       # Draw
             moveStarfield($stars)                                       # Move
 
@@ -159,10 +192,30 @@ function Start-PowerSpace {
     }
 
     # -------------------------------- MAIN --------------------------------
-    $debug = $false
+    $debug = $true
     $fps = 50
 
     gameLoop
+
+    # -------------------------------- SAVE --------------------------------
+    <#
+    while(1) {
+        $pressedKey = $host.ui.RawUI.ReadKey() |%{$_.VirtualKeyCode}
+
+        if ($pressedKey -eq 37) {
+            Write-Host "Left"
+        }
+        if ($pressedKey -eq 38) {
+            Write-Host "Up"
+        }
+        if ($pressedKey -eq 39) {
+            Write-Host "Right"
+        }
+        if ($pressedKey -eq 40) {
+            Write-Host "Down"
+        }
+    }
+    #>
 
     # -------------------------------- DEBUG -------------------------------
     #$starfield = makeStarfield($stars)
