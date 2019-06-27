@@ -50,7 +50,7 @@ function Start-PowerSpace {
                 if ($star.pos -eq ($spaceship.x + $i)) {                                                                    # star is behind the ship
                     for ($i = 0; $i -lt $spaceship.x; $i++) {
                         if ($debug) {
-                            $starline = $starline + "D"
+                            $starline = $starline + "B"
                         } else {
                             $starline = $starline + " "
                         }
@@ -60,7 +60,7 @@ function Start-PowerSpace {
 
                     for ($i = (($spaceship.x + $spaceship.appearance1.Length)); $i -lt $windowWidth; $i++) {
                         if ($debug) {
-                            $starline = $starline + "D"
+                            $starline = $starline + "B"
                         } else {
                             $starline = $starline + " "
                         }
@@ -73,7 +73,7 @@ function Start-PowerSpace {
             if ($star.pos -lt 1) {                                                                                          # star is out of bounds
                 for ($i = 0; $i -lt $spaceship.x; $i++) {
                     if ($debug) {
-                        $starline = $starline + "W"
+                        $starline = $starline + "O"
                     } else {
                         $starline = $starline + " "
                     }
@@ -83,7 +83,7 @@ function Start-PowerSpace {
 
                 for ($i = (($spaceship.x + $spaceship.appearance1.Length)); $i -lt $windowWidth; $i++) {
                     if ($debug) {
-                        $starline = $starline + "W"
+                        $starline = $starline + "O"
                     } else {
                         $starline = $starline + " "
                     }
