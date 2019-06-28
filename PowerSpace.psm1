@@ -125,7 +125,7 @@ function Start-PowerSpace {
 
     # -------------------------------- MAIN --------------------------------
     . "$PSScriptRoot\CreateStarline.ps1"
-    $debug = $true
+    $debug = $false
     $fps = 50
 
     gameLoop
