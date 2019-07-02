@@ -135,7 +135,7 @@ function Start-PowerSpace {
                     }
                 }
                 if ($x.Key -eq "DownArrow") {
-                    if (($spaceship.y + $spaceship.height) -lt $windowHeight - 1) {
+                    if (($spaceship.y + $spaceship.height) -lt $windowHeight - 2) {
                         $spaceship.y = $spaceship.y + 1
                     }
                 }
@@ -171,7 +171,7 @@ function Start-PowerSpace {
     . "$PSScriptRoot\src\CreateStarline.ps1"
     . "$PSScriptRoot\src\Classes.ps1"
     $debug = $false
-    $fps = 10
+    $fps = 60
 
     gameLoop
 }
