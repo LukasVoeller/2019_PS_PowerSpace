@@ -27,6 +27,8 @@ Set-ExecutionPolicy RemoteSigned
 Start-PowerSpace
 ```
 
+## Images
+
 <p>
 <img src="https://github.com/LukasVoeller/PS_2019_PowerSpace/blob/master/images/Console.PNG" width="1000" "v0.6.0"/>
 </p>
