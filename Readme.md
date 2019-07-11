@@ -8,7 +8,7 @@ The script can be tested as described next.
 
 ```
 1. Copy the files in the following dircetory:
-  C:\Users\____\Documents\WindowsPowerShell\Modules\PowerSpace
+  C:\Users\Documents\WindowsPowerShell\Modules\PowerSpace
 
 2. Check if the path is registred Eviroment path by using:
   $Env:PSModulePath
