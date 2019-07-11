@@ -8,15 +8,18 @@ The script can be tested as described next.
 
 ```
 1. Copy the files in the following dircetory:
-C:\Users\____\Documents\WindowsPowerShell\Modules\PowerSpace
+  C:\Users\____\Documents\WindowsPowerShell\Modules\PowerSpace
+
 2. Check if the path is registred Eviroment path by using:
-$Env:PSModulePath
+  $Env:PSModulePath
 3. Import the module by using:
-Import-module -name PowerSpace
+  Import-module -name PowerSpace
+  
 4. Finally set the Execution policy scope to your local machine:
-Set-ExecutionPolicy RemoteSigned
+  Set-ExecutionPolicy RemoteSigned
+
 5. Start the script with:
-Start-PowerSpace
+  Start-PowerSpace
 ```
 
 ## Images
