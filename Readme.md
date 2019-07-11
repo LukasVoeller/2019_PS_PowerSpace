@@ -12,6 +12,7 @@ The script can be tested as described next.
 
 2. Check if the path is registred Eviroment path by using:
   $Env:PSModulePath
+  
 3. Import the module by using:
   Import-module -name PowerSpace
   
