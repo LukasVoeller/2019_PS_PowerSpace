@@ -13,12 +13,12 @@ function Start-PowerSpace {
         return $stars
     }
 
-    function createStarfield ([Star[]] $stars, [Spaceship] $spaceship, [Shot] $shot) {
+    function createStarfield ([Star[]] $stars, [Spaceship] $spaceship, [Shot] $shot, [int] $bottomSpace) {
         $windowWidth = $Host.UI.RawUI.WindowSize.Width
         $windowHeight = $Host.UI.RawUI.WindowSize.Height
         $starfield = ""
     
-        for ($i = 1; $i -le $windowHeight - 3; $i++) {                                  # -2 so the last line ist the command indicator "_"
+        for ($i = 1; $i -le ($windowHeight - $bottomSpace); $i++) {                                  # -2 so there is room for the UI and the comandline indicator "_"
             $starline = createStarline $stars[$i] $spaceship $shot $i
             $starfield = $starfield + $starline
         }
@@ -61,7 +61,7 @@ function Start-PowerSpace {
         }
     }
 
-    function createSeperator {
+    function createUiSeperator {
         $seperator = ""
         $seperatorChar = "-"
 
@@ -70,6 +70,81 @@ function Start-PowerSpace {
         }
 
         return $seperator
+    }
+
+    function writeUiInfo ([string] $spaceshipName, [int] $lives, [int] $credits) {
+        $windowWidth = $Host.UI.RawUI.WindowSize.Width
+        $info = ""
+
+        Write-Host "|" -NoNewline -ForegroundColor DarkGray
+        Write-Host "    " $spaceshipName "    " -NoNewline
+        $info = $info + "|     " + $spaceshipName + "     "
+
+        Write-Host "|" -NoNewline -ForegroundColor DarkGray
+        Write-Host "     " -NoNewline
+        $info = $info + "|     "
+        for ($i = 0; $i -lt $lives; $i++) {
+            Write-Host "<3 " -NoNewline -ForegroundColor Red
+            $info = $info + "<3 "
+        }
+
+        Write-Host "     " -NoNewline
+        $info = $info + "     "
+        $dottedCredits = dotNumber $credits
+        Write-Host "|" -NoNewline -ForegroundColor DarkGray
+        Write-Host "     " -NoNewline
+        Write-Host "$" -NoNewline -ForegroundColor Green
+        Write-Host $dottedCredits -NoNewline -ForegroundColor White
+        Write-Host "     " -NoNewline
+        Write-Host "|" -NoNewline -ForegroundColor DarkGray
+        $info = $info + "|     $" + $dottedCredits + "     |"
+
+        $remainingChars = $windowWidth - $info.Length
+        for ($i = 1; $i -lt $remainingChars; $i++) {
+            Write-Host " " -NoNewline
+            $info = $info + " "
+        }
+        Write-Host "|" -ForegroundColor DarkGray #-NoNewline
+        $info = $info + "|"
+    }
+
+    function dotNumber ([int] $number) {
+        $numberDotted = ""
+        $numberString = $number.ToString()
+    
+        if ($number -ge 1000 -and $number -lt 10000) {
+            $numberDotted = $numberDotted + $numberString.subString(0,1)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(1,3)
+        } elseif ($number -ge 10000 -and $number -lt 100000) {
+            $numberDotted = $numberDotted + $numberString.subString(0,2)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(2,3)
+        } elseif ($number -ge 100000 -and $number -lt 1000000) {
+            $numberDotted = $numberDotted + $numberString.subString(0,3)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(2,3)
+        } elseif ($number -ge 1000000 -and $number -lt 10000000) {
+            $numberDotted = $numberDotted + $numberString.subString(0,1)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(1,3)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(4,3)
+        } elseif ($number -ge 10000000 -and $number -lt 100000000) {
+            $numberDotted = $numberDotted + $numberString.subString(0,2)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(2,3)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(5,3)
+        } elseif ($number -ge 100000000 -and $number -lt 1000000000) {
+            $numberDotted = $numberDotted + $numberString.subString(0,3)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(3,3)
+            $numberDotted = $numberDotted + "."
+            $numberDotted = $numberDotted + $numberString.subString(6,3)
+        }
+    
+        return $numberDotted
     }
 
     function setWindowSize {
@@ -103,18 +178,15 @@ function Start-PowerSpace {
             $windowWidth = $Host.UI.RawUI.WindowSize.Width
             $windowHeight = $Host.UI.RawUI.WindowSize.Height
 
-            $starfield = createStarfield $stars $spaceship $shot            # Update
+            $starfield = createStarfield $stars $spaceship $shot 3          # Update    3 for ui
             Write-Host $starfield                                           # Draw
             moveStarfield $stars 1                                          # Move stars
             moveShot $shot                                                  # Move Shot
     
-            $seperator = createSeperator                                    # Draw Seperator and Footer
-            Write-Host $seperator
-            if (-not $debug) {
-                Write-Host "Energy:[xxx       ]   Credits: 1000c   Level: Lorem"
-            } else {
-                Write-Host "Stars:" $stars.Length "Ship X:" $spaceship.x "Ship Y:" $spaceship.y
-            }
+            $seperator = createUiSeperator                                  # Draw Seperator and Footer
+            Write-Host $seperator -NoNewline -ForegroundColor DarkGray
+            writeUiInfo $spaceship.name 5 450000
+            #Write-Host $seperator -NoNewline
 
             if ([console]::KeyAvailable) {                                  # Controls
                 $x = [System.Console]::ReadKey()
@@ -174,4 +246,44 @@ function Start-PowerSpace {
     $fps = 60
 
     gameLoop
+
+    #TODO
+    #Add Timer and slower Stars
+    #Add Asteroids
+    # Make Ui Seperators DarkGrey
+
+<#
+    [Star[]] $stars = createStars
+
+    while ($true) {
+        $windowWidth = $Host.UI.RawUI.WindowSize.Width
+        $windowHeight = $Host.UI.RawUI.WindowSize.Height
+
+        $starfield = createStarfield $stars $spaceship $shot 1          # Update    1 for cmd indicator
+        Write-Host $starfield                                           # Draw
+        moveStarfield $stars 1                                          # Move stars
+
+        for ($i = 0; $i -lt $stars.Length-1; $i++) {                    # Spawn new stars
+            if ($stars[$i].pos -lt 1) {
+                $spawnStar = Get-Random -Minimum 1 -Maximum 50
+    
+                if ($spawnStar -eq 1) {
+                    $stars[$i] = $windowWidth
+                }
+            }
+        }
+
+        if ($windowHeight -gt 40) {                                     # Add new stars if the height of the console window increases
+            if ($windowHeight -gt $stars.Length) {
+                $pos = Get-Random -Minimum 0 -Maximum $windowWidth
+                $star = New-Object Star($pos)
+                $stars += @($star)
+            }
+        }
+
+        Start-Sleep -Milliseconds (1000 / $fps)
+        Clear-Host
+    }
+#>
+
 }

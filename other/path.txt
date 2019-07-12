@@ -1,3 +1,0 @@
-C:\Users\lv\Documents\WindowsPowerShell\Modules\PowerSpace
-
-Install-Module PowerSpace
