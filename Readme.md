@@ -1,6 +1,6 @@
 # PS_2019_PowerSpace
 
-A PowerShell script just for fun. It creates the illusion of a scrolling space background.
+A PowerShell script made just for fun. It creates the illusion of a scrolling space background.
 The whole purpose of this script ist to get the hang of it get a first feel for the object-oriented scripting.
 The script can be tested as described next.
 
