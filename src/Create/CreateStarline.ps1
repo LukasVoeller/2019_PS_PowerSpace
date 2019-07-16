@@ -18,7 +18,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot[]] $shots, 
         }
     }
 
-    if ($row -eq $spaceship.y) {                                        # Determine the appearance line of the spaceship up to ships with a height of 5
+    if ($row -eq $spaceship.y) {                                        # Determine the appearance line of the spaceship up to ships with a height of 7
         $appIndex = 0
     } elseif ($row -eq ($spaceship.y + 1)) {
         $appIndex = 1
@@ -28,6 +28,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot[]] $shots, 
         $appIndex = 3
     } elseif ($row -eq ($spaceship.y + 4)) {
         $appIndex = 4
+    } elseif ($row -eq ($spaceship.y + 5)) {
+        $appIndex = 5
+    } elseif ($row -eq ($spaceship.y + 6)) {
+        $appIndex = 6
     }
 
     # The debug alternatives "L", "R", "O" and "B" for the spaceship lines, are indicating that the star is

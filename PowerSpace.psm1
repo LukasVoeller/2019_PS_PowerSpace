@@ -1,7 +1,7 @@
 function Start-PowerSpace {
     function gameLoop () {
         [Star[]] $stars = createStars
-        [Spaceship] $spaceship = createJetEngineII
+        [Spaceship] $spaceship = createJetEngineI
         [Shot[]] $shots = createShots $spaceship.weaponCount
 
         while ($true) {
