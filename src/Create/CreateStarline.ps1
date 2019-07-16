@@ -1,4 +1,4 @@
-function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $row) {
+function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot[]] $shots, $row) {
     $windowWidth = $Host.UI.RawUI.WindowSize.Width
     $windowHeight = $Host.UI.RawUI.WindowSize.Height
     $starline = ""
@@ -6,17 +6,19 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
     $isSpaceshipLine = $false
     $isShotLine = $false
 
-    for ($i = 0; $i -lt $spaceship.height; $i++) {              # Determines if the line that is about to be dawn contains a part of a spaceship
+    for ($i = 0; $i -lt $spaceship.height; $i++) {                      # Determines if the line that is about to be dawn contains a part of a spaceship
         if ($row -eq ($spaceship.y + $i)) {
             $isSpaceshipLine = $true
         }
     }
 
-    if ($row -eq $shot.y) {                                     # Determines if the line that is about to be drawn contains a shot
-        $isShotLine = $true
+    for ($i = 0; $i -lt $shots.Length; $i++) {
+        if ($row -eq $shots[$i].y) {                                    # Determines if the line that is about to be drawn contains a shot
+            $isShotLine = $true
+        }
     }
 
-    if ($row -eq $spaceship.y) {                                # Determine the appearance line of the spaceship up to ships with a height of 5
+    if ($row -eq $spaceship.y) {                                        # Determine the appearance line of the spaceship up to ships with a height of 5
         $appIndex = 0
     } elseif ($row -eq ($spaceship.y + 1)) {
         $appIndex = 1
@@ -33,7 +35,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
     # Handeling lines without a star ----------------------------------------------------------------------------------------
     if ($isSpaceshipLine -and $isShotLine) {                                                                                # The line contains a spaceship part and a shot                         
-        if ($star.pos -ge $spaceship.x -and $star.pos -lt ($spaceship.x + $spaceship.appearance[$appIndex].Length) -or $star.pos -eq $shot.x) {     # Star is at the same position as the ship or the shot                                                                   
+        if ($star.pos -ge $spaceship.x -and $star.pos -lt ($spaceship.x + $spaceship.appearance[$appIndex].Length) -or $star.pos -eq $shots[0].x) {     # Star is at the same position as the ship or the shot                                                                   
             for ($i = 1; $i -lt $spaceship.x; $i++) {                                                                       # -1 for the added shot
                 if ($debug) {
                     $starline = $starline + "b"
@@ -44,7 +46,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
             $starline = $starline + $spaceship.appearance[$appIndex]
                 
-            for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shot.x; $i++) {
+            for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shots[0].x; $i++) {
                 if ($debug) {
                     $starline = $starline + "b"
                 } else {
@@ -52,10 +54,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                 }
             }
 
-            if ($shot.x -lt $windowWidth) {
-                $starline = $starline + $shot.appearance
+            if ($shots[0].x -lt $windowWidth) {
+                $starline = $starline + $shots[0].appearance
 
-                for ($i = $shot.x; $i -lt ($windowWidth); $i++) {                                                           
+                for ($i = $shots[0].x; $i -lt ($windowWidth); $i++) {                                                           
                     if ($debug) {
                         $starline = $starline + "b"
                     } else {
@@ -63,7 +65,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
             } else {
-                for ($i = $shot.x; $i -lt ($windowWidth + 1); $i++) {                                                           
+                for ($i = $shots[0].x; $i -lt ($windowWidth + 1); $i++) {                                                           
                     if ($debug) {
                         $starline = $starline + "b"
                     } else {
@@ -84,7 +86,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
             $starline = $starline + $spaceship.appearance[$appIndex]
 
-            for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shot.x; $i++) {               
+            for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shots[0].x; $i++) {               
                 if ($debug) {
                     $starline = $starline + "o"
                 } else {
@@ -92,10 +94,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                 }
             }
 
-            if ($shot.x -lt $windowWidth) {
-                $starline = $starline + $shot.appearance
+            if ($shots[0].x -lt $windowWidth) {
+                $starline = $starline + $shots[0].appearance
 
-                for ($i = $shot.x; $i -lt $windowWidth; $i++) {                                                           
+                for ($i = $shots[0].x; $i -lt $windowWidth; $i++) {                                                           
                     if ($debug) {
                         $starline = $starline + "o"
                     } else {
@@ -103,7 +105,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
             } else {
-                for ($i = $shot.x; $i -lt $windowWidth + 1; $i++) {                                                           
+                for ($i = $shots[0].x; $i -lt $windowWidth + 1; $i++) {                                                           
                     if ($debug) {
                         $starline = $starline + "o"
                     } else {
@@ -157,7 +159,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
             return $starline
         }
     } elseif ($isShotLine -and $star.pos -ge 1) {
-        if ($shot.x -eq $star.pos) {                                                                                        # Shot is at the same position as the star
+        if ($shots[0].x -eq $star.pos) {                                                                                        # Shot is at the same position as the star
             for ($i = 0; $i -lt $star.pos - 1; $i++) {                                                                      # -1 for the star
                 if ($debug) {
                     $starline = $starline + "b"
@@ -178,7 +180,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
         }
     } elseif ($star.pos -lt 1) {                                                                                            # The line neither contains a ship part nor a shot
         if ($isShotLine) {
-            for ($i = 0; $i -lt $shot.x - 1; $i++) {                                                                        # -1 for the star
+            for ($i = 0; $i -lt $shots[0].x - 1; $i++) {                                                                        # -1 for the star
                 if ($debug) {
                     $starline = $starline + "-"
                 } else {
@@ -186,10 +188,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                 }
             }
 
-            if ($shot.x -lt $windowWidth) {
-                $starline = $starline + $shot.appearance
+            if ($shots[0].x -lt $windowWidth) {
+                $starline = $starline + $shots[0].appearance
 
-                for ($i = $shot.x; $i -lt $windowWidth; $i++) {
+                for ($i = $shots[0].x; $i -lt $windowWidth; $i++) {
                     if ($debug) {
                         $starline = $starline + "-"
                     }else {
@@ -197,7 +199,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
             } else {
-                for ($i = $shot.x; $i -lt $windowWidth; $i++) {
+                for ($i = $shots[0].x; $i -lt $windowWidth; $i++) {
                     if ($debug) {
                         $starline = $starline + "-"
                     }else {
@@ -243,7 +245,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
             $starline = $starline + $spaceship.appearance[$appIndex]
 
-            for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shot.x; $i++) {                   # -1 for the added shot
+            for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shots[0].x; $i++) {                   # -1 for the added shot
                 if ($debug) {
                     $starline = $starline + "r"
                 } else {
@@ -251,10 +253,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                 }
             }
 
-            if ($shot.x -lt $windowWidth) {
-                $starline = $starline + $shot.appearance
+            if ($shots[0].x -lt $windowWidth) {
+                $starline = $starline + $shots[0].appearance
 
-                for ($i = $shot.x; $i -lt ($windowWidth); $i++) {                                                               
+                for ($i = $shots[0].x; $i -lt ($windowWidth); $i++) {                                                               
                     if ($debug) {
                         $starline = $starline + "r"
                     } else {
@@ -262,9 +264,9 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
             } else {
-                for ($i = $shot.x; $i -lt ($windowWidth + 1); $i++) {                                                               
+                for ($i = $shots[0].x; $i -lt ($windowWidth + 1); $i++) {                                                               
                     if ($debug) {
-                        $starline = $starline + "r"
+                        $starline = $starline + "#"
                     } else {
                         $starline = $starline + " "
                     }
@@ -281,8 +283,8 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
             $starline = $starline + $spaceship.appearance[$appIndex]
 
-            if ($shot.x -lt $star.pos) {                                                                                    # The shot is left from the star
-                for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shot.x; $i++) {
+            if ($shots[0].x -lt $star.pos) {                                                                                    # The shot is left from the star
+                for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $shots[0].x; $i++) {
                     if ($debug) {
                         $starline = $starline + "l"
                     } else {
@@ -290,10 +292,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
     
-                if ($shot.x -lt $windowWidth) {
-                    $starline = $starline + $shot.appearance
+                if ($shots[0].x -lt $windowWidth) {
+                    $starline = $starline + $shots[0].appearance
 
-                    for ($i = $shot.x; $i -lt $star.pos - 1; $i++) {                                                            # -1 for the star
+                    for ($i = $shots[0].x; $i -lt $star.pos - 1; $i++) {                                                            # -1 for the star
                         if ($debug) {
                             $starline = $starline + "x"
                         } else {
@@ -301,7 +303,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                         }
                     }
                 } else {
-                    for ($i = $shot.x; $i -lt $star.pos; $i++) {
+                    for ($i = $shots[0].x; $i -lt $star.pos; $i++) {
                         if ($debug) {
                             $starline = $starline + "x"
                         } else {
@@ -319,7 +321,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                         $starline = $starline + " "
                     }
                 }
-            } elseif ($shot.x -gt $star.pos) {                                                                              # The shot is right from the star
+            } elseif ($shots[0].x -gt $star.pos) {                                                                              # The shot is right from the star
                 for ($i = (($spaceship.x + $spaceship.appearance[$appIndex].Length)); $i -lt $star.pos; $i++) {
                     if ($debug) {
                         $starline = $starline + "l"
@@ -330,7 +332,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
                 $starline = $starline + $star.appearance
 
-                for ($i = $star.pos; $i -lt $shot.x - 1; $i++) {                                                            # -1 for the shot
+                for ($i = $star.pos; $i -lt $shots[0].x - 1; $i++) {                                                            # -1 for the shot
                     if ($debug) {
                         $starline = $starline + "x"
                     } else {
@@ -338,10 +340,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
 
-                if ($shot.x -lt $windowWidth) {
-                    $starline = $starline + $shot.appearance
+                if ($shots[0].x -lt $windowWidth) {
+                    $starline = $starline + $shots[0].appearance
 
-                    for ($i = $shot.x; $i -lt ($windowWidth); $i++) {                                                       # -2 for the added shot and star
+                    for ($i = $shots[0].x; $i -lt ($windowWidth); $i++) {                                                       # -2 for the added shot and star
                         if ($debug) {
                             $starline = $starline + "r"
                         } else {
@@ -349,7 +351,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                         }
                     }
                 } else {
-                    for ($i = $shot.x; $i -lt ($windowWidth + 1); $i++) {
+                    for ($i = $shots[0].x; $i -lt ($windowWidth + 1); $i++) {
                         if ($debug) {
                             $starline = $starline + "r"
                         } else {
@@ -428,8 +430,8 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
             }
         }
     } elseif ($isShotLine) { # -------------------------------------------------------------------------------------------- # The line only contains a shot
-        if ($shot.x -lt $star.pos) {                                                                                        # Shot is left from the star
-            for ($i = 0; $i -lt $shot.x - 1; $i++) {                                                                        # -1 for the shot
+        if ($shots[0].x -lt $star.pos) {                                                                                        # Shot is left from the star
+            for ($i = 0; $i -lt $shots[0].x - 1; $i++) {                                                                        # -1 for the shot
                 if ($debug) {
                     $starline = $starline + "l"
                 } else {
@@ -437,10 +439,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                 }
             }
 
-            if ($shot.x -lt $windowWidth) {
-                $starline = $starline + $shot.appearance
+            if ($shots[0].x -lt $windowWidth) {
+                $starline = $starline + $shots[0].appearance
 
-                for ($i = $shot.x; $i -lt $star.pos - 1; $i++) {                                                                # -1 for the star
+                for ($i = $shots[0].x; $i -lt $star.pos - 1; $i++) {                                                                # -1 for the star
                     if ($debug) {
                         $starline = $starline + "x"
                     } else {
@@ -448,7 +450,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
             } else {
-                for ($i = $shot.x; $i -lt $star.pos; $i++) {
+                for ($i = $shots[0].x; $i -lt $star.pos; $i++) {
                     if ($debug) {
                         $starline = $starline + "x"
                     } else {
@@ -466,7 +468,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     $starline = $starline + " "
                 }
             }
-        } elseif ($shot.x -gt $star.pos) {                                                                                  # Shot is right from the star
+        } elseif ($shots[0].x -gt $star.pos) {                                                                                  # Shot is right from the star
             for ($i = 0; $i -lt $star.pos - 1; $i++) {                                                                      # -1 for the star
                 if ($debug) {
                     $starline = $starline + "l"
@@ -477,7 +479,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
 
             $starline = $starline + $star.appearance
 
-            for ($i = $star.pos; $i -lt $shot.x - 1; $i++) {                                                                # -1 for the shot
+            for ($i = $star.pos; $i -lt $shots[0].x - 1; $i++) {                                                                # -1 for the shot
                 if ($debug) {
                     $starline = $starline + "x"
                 } else {
@@ -485,10 +487,10 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                 }
             }
 
-            if ($shot.x -lt $windowWidth) {
-                $starline = $starline + $shot.appearance
+            if ($shots[0].x -lt $windowWidth) {
+                $starline = $starline + $shots[0].appearance
 
-                for ($i = $shot.x; $i -lt $windowWidth; $i++) {
+                for ($i = $shots[0].x; $i -lt $windowWidth; $i++) {
                     if ($debug) {
                         $starline = $starline + "r"
                     } else {
@@ -496,7 +498,7 @@ function createStarline ([Star] $star, [Spaceship] $spaceship, [Shot] $shot, $ro
                     }
                 }
             } else {
-                for ($i = $shot.x; $i -lt $windowWidth + 1; $i++) {
+                for ($i = $shots[0].x; $i -lt $windowWidth + 1; $i++) {
                     if ($debug) {
                         $starline = $starline + "r"
                     } else {
