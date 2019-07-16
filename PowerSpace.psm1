@@ -12,7 +12,8 @@ function Start-PowerSpace {
             Write-Host $starfield                                           # Draw
             moveStarfield $stars 1                                          # Move stars, 1 for normal, 2 for funky
             moveShots $shots                                                # Move Shot
-    
+            changeAppearance $spaceship
+
             $seperator = createUiSeperator                                  # Draw Seperator and Footer
             Write-Host $seperator -NoNewline -ForegroundColor DarkGray
             writeUiInfo $spaceship.name 5 450000
@@ -89,6 +90,7 @@ function Start-PowerSpace {
     . "$PSScriptRoot\src\Classes.ps1"
     . "$PSScriptRoot\src\Userinterface.ps1"
     . "$PSScriptRoot\src\Utility.ps1"
+    . "$PSScriptRoot\src\changeSpaceships.ps1"
 
     $debug = $false
     $fps = 100

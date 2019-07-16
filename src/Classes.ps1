@@ -11,6 +11,7 @@ class Player {
 class Spaceship {
     [string] $name = $null
     [String[]] $appearance = $null
+    [int] $appearanceFrame = 0
     [int[]] $weaponPos = $null
     [int] $weaponCount = $null
     [int] $width
