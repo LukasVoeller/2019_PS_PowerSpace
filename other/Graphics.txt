@@ -2,25 +2,25 @@
 
 				Jet Engine I
 \--\
-JE-I[O]=
+JE-I[O]>
 /--/
 
 
 				Jet Engine II
 \---\
-JE-II\=
+JE-II\>
   [   [O]
-JE-II/=
+JE-II/>
 /---/
 
 
 				Jet Engine III
 \----\
-JE-III\=
+JE-III\>
   [    [O]
- JE-III-|=
+ JE-III-|>
   [    [O]
-JE-III/=
+JE-III/>
 /----/
 
 --------------------  ASTEROIDS -------------------- 

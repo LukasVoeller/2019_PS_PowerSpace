@@ -1,6 +1,10 @@
 function Start-PowerSpace {
     function gameLoop () {
-        [Star[]] $stars = createStars
+        $windowWidthInitial = $Host.UI.RawUI.WindowSize.Width
+        $windowHeightInitial = $Host.UI.RawUI.WindowSize.Height
+
+        $bottomSpace = 3
+        [Star[]] $stars = createStars $bottomSpace
         [Spaceship] $spaceship = createJetEngineI
         [Shot[]] $shots = createShots $spaceship.weaponCount
 
@@ -8,41 +12,41 @@ function Start-PowerSpace {
             $windowWidth = $Host.UI.RawUI.WindowSize.Width
             $windowHeight = $Host.UI.RawUI.WindowSize.Height
 
-            $starfield = createStarfield $stars $spaceship $shots 3         # Update, 3 = 2 for UI + 1 cmd indicator
-            Write-Host $starfield                                           # Draw
-            moveStarfield $stars 1                                          # Move stars, 1 for normal, 2 for funky
-            moveShots $shots                                                # Move Shot
-            changeAppearance $spaceship
+            $starfield = createStarfield $stars $spaceship $shots $bottomSpace          # Update, 3 = 2 for UI + 1 cmd indicator
+            Write-Host $starfield                                                       # Draw
+            moveStarfield $stars 1                                                      # Move stars, 1 for normal, 2 for funky
+            moveShots $shots                                                            # Move Shot
+            animateSpaceship $spaceship
 
-            $seperator = createUiSeperator                                  # Draw Seperator and Footer
+            $seperator = createUiSeperator                                              # Draw Seperator and Footer
             Write-Host $seperator -NoNewline -ForegroundColor DarkGray
-            writeUiInfo $spaceship.name 5 450000
+            writeUiInfo $spaceship.name $spaceship.hp 450000
             #Write-Host $seperator -NoNewline
 
-            if ([console]::KeyAvailable) {                                  # Controls
-                $x = [System.Console]::ReadKey()
+            if ([console]::KeyAvailable) {                                              # Controls
+                $input = [System.Console]::ReadKey()
     
-                if ($x.Key -eq "LeftArrow") {
+                if ($input.Key -eq "LeftArrow") {
                     if ($spaceship.x -gt 1) {
-                        $spaceship.x = $spaceship.x - 1
+                        $spaceship.x = $spaceship.x - $spaceship.moveSpeed
                     }
                 }
-                if ($x.Key -eq "RightArrow") {
+                if ($input.Key -eq "RightArrow") {
                     if ($spaceship.x -lt ($windowWidth - $spaceship.width)) {
-                        $spaceship.x = $spaceship.x + 1
+                        $spaceship.x = $spaceship.x + $spaceship.moveSpeed
                     }
                 }
-                if ($x.Key -eq "UpArrow") {
+                if ($input.Key -eq "UpArrow") {
                     if ($spaceship.y -gt 1) {
-                        $spaceship.y = $spaceship.y - 1
+                        $spaceship.y = $spaceship.y - $spaceship.moveSpeed
                     }
                 }
-                if ($x.Key -eq "DownArrow") {
+                if ($input.Key -eq "DownArrow") {
                     if (($spaceship.y + $spaceship.height) -lt $windowHeight - 2) {
-                        $spaceship.y = $spaceship.y + 1
+                        $spaceship.y = $spaceship.y + $spaceship.moveSpeed
                     }
                 }
-                if ($x.Key -eq "Enter") {
+                if ($input.Key -eq "Enter") {
                     for ($i = 0; $i -lt $shots.Length; $i++) {
                         if ($shots[$i].fired -eq $false) {
                             $shots[$i].x = ($spaceship.x + $spaceship.width)
@@ -54,7 +58,7 @@ function Start-PowerSpace {
                 }
             }
 
-            for ($i = 0; $i -lt $stars.Length-1; $i++) {                    # Spawn new stars
+            for ($i = 0; $i -lt $stars.Length; $i++) {                                                                      # Spawn new stars
                 if ($stars[$i].pos -lt 1) {
                     $spawnStar = Get-Random -Minimum 1 -Maximum 50
         
@@ -64,15 +68,14 @@ function Start-PowerSpace {
                 }
             }
 
-            if ($windowHeight -gt 40) {                                     # Add new stars if the height of the console window increases
-                if ($windowHeight -gt $stars.Length) {
-                    $pos = Get-Random -Minimum 0 -Maximum $windowWidth
-                    $star = New-Object Star($pos)
-                    $stars += @($star)
-                }
+                                                                                                                            # Add new stars if the window height increases
+            if ($windowHeight -gt $windowHeightInitial -and ($stars.Length + $bottomSpace) -lt $windowHeight) {
+                $pos = Get-Random -Minimum 1 -Maximum ($windowWidth + 1)
+                $star = New-Object Star $pos
+                $stars += @($star)
             }
 
-            Start-Sleep -Milliseconds (1000 / $fps)
+            Start-Sleep -Milliseconds (1000 / $fps)                                                                         # FPS control and refresh
             if ($debug -eq $false) {
                 Clear-Host
             }
@@ -90,48 +93,15 @@ function Start-PowerSpace {
     . "$PSScriptRoot\src\Classes.ps1"
     . "$PSScriptRoot\src\Userinterface.ps1"
     . "$PSScriptRoot\src\Utility.ps1"
-    . "$PSScriptRoot\src\changeSpaceships.ps1"
+    . "$PSScriptRoot\src\AnimateSpaceships.ps1"
 
+    Clear-Host
     $debug = $false
-    $fps = 100
+    $fps = 1000
+
     gameLoop
 
     #TODO
     #Add Timer and slower Stars
     #Add Asteroids
-
-<#
-    [Star[]] $stars = createStars
-
-    while ($true) {
-        $windowWidth = $Host.UI.RawUI.WindowSize.Width
-        $windowHeight = $Host.UI.RawUI.WindowSize.Height
-
-        $starfield = createStarfield $stars $spaceship $shot 1          # Update    1 for cmd indicator
-        Write-Host $starfield                                           # Draw
-        moveStarfield $stars 1                                          # Move stars
-
-        for ($i = 0; $i -lt $stars.Length-1; $i++) {                    # Spawn new stars
-            if ($stars[$i].pos -lt 1) {
-                $spawnStar = Get-Random -Minimum 1 -Maximum 50
-    
-                if ($spawnStar -eq 1) {
-                    $stars[$i] = $windowWidth
-                }
-            }
-        }
-
-        if ($windowHeight -gt 40) {                                     # Add new stars if the height of the console window increases
-            if ($windowHeight -gt $stars.Length) {
-                $pos = Get-Random -Minimum 0 -Maximum $windowWidth
-                $star = New-Object Star($pos)
-                $stars += @($star)
-            }
-        }
-
-        Start-Sleep -Milliseconds (1000 / $fps)
-        Clear-Host
-    }
-#>
-
 }

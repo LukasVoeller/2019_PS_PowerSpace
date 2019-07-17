@@ -1,7 +1,7 @@
 class Player {
     [string] $name = $null
-    [int] $credits
     [Spaceship] $spaceship = $null
+    [int] $credits = 0
 
     Player ([String] $newName) {
         $this.name = $newName
@@ -10,21 +10,26 @@ class Player {
 
 class Spaceship {
     [string] $name = $null
+    [int] $hp = $null
+    [int] $moveSpeed = 1
+
     [String[]] $appearance = $null
     [int] $appearanceFrame = 0
-    [int[]] $weaponPos = $null
     [int] $weaponCount = $null
+    [int[]] $weaponPos = $null
+    
     [int] $width
     [int] $height
     [int] $x = 10
     [int] $y = 10
 
-    Spaceship ([int] $newWeaponCount, [int[]] $newWeaponPos, [String[]] $newAppearance, [String] $newName, [int] $newX, [int] $newY) {
-        $this.weaponCount = $newWeaponCount
-        $this.weaponPos = $newWeaponPos
+    Spaceship ([int] $newWeaponCount, [int[]] $newWeaponPos, [String[]] $newAppearance, [String] $newName, [int] $newHp, [int] $newX, [int] $newY) {
+        $this.name = $newName
+        $this.hp = $newHp
 
         $this.appearance = $newAppearance
-        $this.name = $newName
+        $this.weaponCount = $newWeaponCount
+        $this.weaponPos = $newWeaponPos
 
         $this.x = $newX
         $this.y = $newY
@@ -43,10 +48,11 @@ class Spaceship {
 class Shot {
     [string] $appearance = ">"
     [int] $moveSpeed = 2
-    [int] $x
-    [int] $y
     [bool] $fired = $false
 
+    [int] $x
+    [int] $y
+    
     Shot ([int] $newX, [int] $newY) {
         $this.x = $newX
         $this.y = $newY
@@ -64,7 +70,9 @@ class Star {
 }
 
 class Asteroid {
+    [string] $name = $null
     [String[]] $appearance = $null
+    [int] $hp
     [int] $width
     [int] $height
     [int] $x = 30
@@ -74,18 +82,12 @@ class Asteroid {
         $this.x = $newX
         $this.y = $newY
 
-        $this.appearance += @("  ____")
-        $this.appearance += @(" /. _I\")
-        $this.appearance += @("|  - -_}")
-        $this.appearance += @(" \_I-_/")
-
         $largestRow = 0                                                     # Determine the width of the asteroid by the largest row
         for ($i = 0; $i -lt $this.appearance.Length; $i++) {
             if ($this.appearance[$i].Length -gt $largestRow) {
                 $largestRow = $this.appearance[$i].Length
             }
         }
-
         $this.width = $largestRow
         $this.height = $this.appearance.Length
     }
