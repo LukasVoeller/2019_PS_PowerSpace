@@ -5,7 +5,7 @@ function Start-PowerSpace {
 
         $bottomSpace = 3
         [Star[]] $stars = createStars $bottomSpace
-        [Spaceship] $spaceship = createJetEngineI
+        [Spaceship] $spaceship = createHeavyCruiser
         [Shot[]] $shots = createShots $spaceship.weaponCount
 
         while ($true) {

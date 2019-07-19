@@ -69,3 +69,29 @@ function createJetEngineIII {
     [Spaceship] $spaceship = New-Object Spaceship $weaponCount, $weaponPos, $appearance, $name, $hp, $shipStartX, $shipStartY
     return $spaceship
 }
+
+function createHeavyCruiser {
+    $name = "Heavy Cruiser"
+    $hp = 10
+
+    [String[]] $appearance = $null
+    $appearance += @("     _______")                     # weaponPos/appearance 0
+    $appearance += @("    / \\\___\________")            # weaponPos/appearance 1
+    $appearance += @("     O |||___|___\\__\__")         # weaponPos/appearance 2
+    $appearance += @("    \_///___/_|     \_\_\\-")      # weaponPos/appearance 3
+    $appearance += @("    / \\\___\_|_____/_/_//-")      # weaponPos/appearance 4
+    $appearance += @("     O |||___|___//__/")           # weaponPos/appearance 5
+    $appearance += @("    \_///___/")                    # weaponPos/appearance 6
+    $weaponCount = 2
+    [int[]] $weaponPos = $null
+    $weaponPos += @(3)
+    $weaponPos += @(4)
+
+    $windowHeightStart = $Host.UI.RawUI.WindowSize.Height - 5
+    $halfWindowHeightStart = $windowHeightStart / 2
+    $shipStartX = 10
+    $shipStartY = [math]::Round($halfWindowHeightStart)
+
+    [Spaceship] $spaceship = New-Object Spaceship $weaponCount, $weaponPos, $appearance, $name, $hp, $shipStartX, $shipStartY
+    return $spaceship
+}
