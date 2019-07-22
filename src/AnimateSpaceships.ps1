@@ -206,4 +206,98 @@ function animateSpaceship ([Spaceship] $spaceship) {
             $spaceship.appearanceFrame = 0
         }
     }
+
+    if ($spaceship.name -eq "Worm") {
+        if ($spaceship.appearanceFrame -eq 0) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("  _______         _\______   ")    # weaponPos/appearance 0
+            $appearanceNew += @(" / \\\___\--.---.-\    | _\  ")    # weaponPos/appearance 1
+            $appearanceNew += @("| O |||___| | | | |     \__|-")    # weaponPos/appearance 2
+            $appearanceNew += @(" \_///___/--^---^-/_______/  ")    # weaponPos/appearance 3
+            $appearanceNew += @("                   /         ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 1
+        } elseif ($spaceship.appearanceFrame -eq 1) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("   _______       _\______    ")    # weaponPos/appearance 0
+            $appearanceNew += @("  / \\\___\-.---.\    | _\   ")    # weaponPos/appearance 1
+            $appearanceNew += @(" | O |||___|| | ||     \__|- ")    # weaponPos/appearance 2
+            $appearanceNew += @("  \_///___/-^---^/_______/   ")    # weaponPos/appearance 3
+            $appearanceNew += @("                  /          ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 2
+        } elseif ($spaceship.appearanceFrame -eq 2) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("    _______     _\______     ")    # weaponPos/appearance 0
+            $appearanceNew += @("   / \\\___\.---\    | _\    ")    # weaponPos/appearance 1
+            $appearanceNew += @("  | O |||___| | |     \__|-  ")    # weaponPos/appearance 2
+            $appearanceNew += @("   \_///___/^---/_______/    ")    # weaponPos/appearance 3
+            $appearanceNew += @("                 /           ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 3
+        } elseif ($spaceship.appearanceFrame -eq 3) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("     _______   _\______      ")    # weaponPos/appearance 0
+            $appearanceNew += @("    / \\\___\--\    | _\     ")    # weaponPos/appearance 1
+            $appearanceNew += @("   | O |||___|||     \__|-   ")    # weaponPos/appearance 2
+            $appearanceNew += @("    \_///___/--/_______/     ")    # weaponPos/appearance 3
+            $appearanceNew += @("                /            ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 4
+        } elseif ($spaceship.appearanceFrame -eq 4) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("      _______ _\______       ")    # weaponPos/appearance 0
+            $appearanceNew += @("     / \\\___\\    | _\      ")    # weaponPos/appearance 1
+            $appearanceNew += @("    | O |||___|     \__|-    ")    # weaponPos/appearance 2
+            $appearanceNew += @("     \_///___//_______/      ")    # weaponPos/appearance 3
+            $appearanceNew += @("               /             ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 5
+        } elseif ($spaceship.appearanceFrame -eq 5) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("     _______   _\______      ")    # weaponPos/appearance 0
+            $appearanceNew += @("    / \\\___\--\    | _\     ")    # weaponPos/appearance 1
+            $appearanceNew += @("   | O |||___|||     \__|-   ")    # weaponPos/appearance 2
+            $appearanceNew += @("    \_///___/--/_______/     ")    # weaponPos/appearance 3
+            $appearanceNew += @("                /            ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 6
+        } elseif ($spaceship.appearanceFrame -eq 6) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("    _______     _\______     ")    # weaponPos/appearance 0
+            $appearanceNew += @("   / \\\___\.---\    | _\    ")    # weaponPos/appearance 1
+            $appearanceNew += @("  | O |||___| | |     \__|-  ")    # weaponPos/appearance 2
+            $appearanceNew += @("   \_///___/^---/_______/    ")    # weaponPos/appearance 3
+            $appearanceNew += @("                 /           ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 7
+        } elseif ($spaceship.appearanceFrame -eq 7) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("   _______       _\______    ")    # weaponPos/appearance 0
+            $appearanceNew += @("  / \\\___\-.---.\    | _\   ")    # weaponPos/appearance 1
+            $appearanceNew += @(" | O |||___|| | ||     \__|- ")    # weaponPos/appearance 2
+            $appearanceNew += @("  \_///___/-^---^/_______/   ")    # weaponPos/appearance 3
+            $appearanceNew += @("                  /          ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 8
+        } elseif ($spaceship.appearanceFrame -eq 8) {
+            [String[]] $appearanceNew = $null
+            $appearanceNew += @("  _______         _\______   ")    # weaponPos/appearance 0
+            $appearanceNew += @(" / \\\___\--.---.-\    | _\  ")    # weaponPos/appearance 1
+            $appearanceNew += @("| O |||___| | | | |     \__|-")    # weaponPos/appearance 2
+            $appearanceNew += @(" \_///___/--^---^-/_______/  ")    # weaponPos/appearance 3
+            $appearanceNew += @("                   /         ")    # weaponPos/appearance 4
+
+            $spaceship.appearance = $appearanceNew
+            $spaceship.appearanceFrame = 0
+        }
+    }
 }

@@ -95,3 +95,26 @@ function createHeavyCruiser {
     [Spaceship] $spaceship = New-Object Spaceship $weaponCount, $weaponPos, $appearance, $name, $hp, $shipStartX, $shipStartY
     return $spaceship
 }
+
+function createWorm {
+    $name = "Worm"
+    $hp = 10
+
+    [String[]] $appearance = $null
+    $appearance += @("  _______         _\______   ")       # weaponPos/appearance 0
+    $appearance += @(" / \\\___\--.---.-\    | _\  ")       # weaponPos/appearance 1
+    $appearance += @("| O |||___| | | | |     \__|-")       # weaponPos/appearance 2
+    $appearance += @(" \_///___/--^---^-/_______/  ")       # weaponPos/appearance 3
+    $appearance += @("                   /         ")       # weaponPos/appearance 4
+    $weaponCount = 1
+    [int[]] $weaponPos = $null
+    $weaponPos += @(2)
+
+    $windowHeightStart = $Host.UI.RawUI.WindowSize.Height - 5
+    $halfWindowHeightStart = $windowHeightStart / 2
+    $shipStartX = 10
+    $shipStartY = [math]::Round($halfWindowHeightStart)
+
+    [Spaceship] $spaceship = New-Object Spaceship $weaponCount, $weaponPos, $appearance, $name, $hp, $shipStartX, $shipStartY
+    return $spaceship
+}

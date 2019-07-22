@@ -5,7 +5,7 @@ function Start-PowerSpace {
 
         $bottomSpace = 3
         [Star[]] $stars = createStars $bottomSpace
-        [Spaceship] $spaceship = createHeavyCruiser
+        [Spaceship] $spaceship = createWorm
         [Shot[]] $shots = createShots $spaceship.weaponCount
 
         while ($true) {
@@ -67,7 +67,6 @@ function Start-PowerSpace {
                     }
                 }
             }
-
                                                                                                                             # Add new stars if the window height increases
             if ($windowHeight -gt $windowHeightInitial -and ($stars.Length + $bottomSpace) -lt $windowHeight) {
                 $pos = Get-Random -Minimum 1 -Maximum ($windowWidth + 1)
@@ -97,7 +96,7 @@ function Start-PowerSpace {
 
     Clear-Host
     $debug = $false
-    $fps = 1000
+    $fps = 100
 
     gameLoop
 
