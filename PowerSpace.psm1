@@ -102,5 +102,5 @@ function Start-PowerSpace {
 
     #TODO
     #Add Timer and slower Stars
-    #Add Asteroids
+    #Add some Asteroids
 }
